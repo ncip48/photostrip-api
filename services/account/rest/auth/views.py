@@ -14,6 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from services.account.rest.user.serializers import ProfileSerializer
+from services.transaction.models.token import TokenTransaction
 
 from .serializers import RegisterSerializer, TokenObtainPairSerializer
 
@@ -95,6 +96,14 @@ class RegisterView(generics.CreateAPIView):
 
         # Save user (create)
         user = serializer.save()
+
+        # generate token for first register = 50 token
+        TokenTransaction.objects.create(
+            user=user,
+            amount=50,
+            type=TokenTransaction.Choices.GIFT,
+            note=f"Rewards for registering #{user.username}",
+        )
 
         # Generate JWT tokens
         refresh = RefreshToken.for_user(user)

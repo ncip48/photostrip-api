@@ -46,8 +46,6 @@ class File(get_subid_model()):
     # Store mimetype (e.g., 'image/png') so the browser knows how to render it
     mime_type = models.CharField(max_length=50, default="image/jpeg")
 
-    user = models.ForeignKey("account.User", on_delete=models.CASCADE)
-
     created = models.DateTimeField(_("created"), auto_now_add=True)
     updated = models.DateTimeField(_("updated"), auto_now=True)
 

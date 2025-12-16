@@ -3,7 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from django.contrib.auth.models import AbstractUser, Permission, UserManager as DjangoUserManager
+from django.contrib.auth.models import AbstractUser, Permission
+from django.contrib.auth.models import UserManager as DjangoUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -37,6 +38,7 @@ class User(AbstractUser, get_subid_model()):
     """
     Custom User model that uses roles for permissions.
     """
+
     email = models.EmailField(_("email address"), unique=True)
     photo = models.ImageField(upload_to="user_photos/", null=True, blank=True)
     roles: models.ManyToManyField["Role"]
@@ -59,9 +61,9 @@ class User(AbstractUser, get_subid_model()):
     @property
     def is_registered(self) -> bool:
         return self.pk is not None
-    
+
     @property
-    def fullname(self) -> str:
+    def full_name(self) -> str:
         """
         Returns the user's full name (first name and last name).
         """

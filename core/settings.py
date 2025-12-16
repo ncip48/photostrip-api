@@ -64,6 +64,11 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "services.account",
     "services.file",
+    "services.gallery",
+    "services.photostrip",
+    "services.template",
+    "services.product",
+    "services.transaction",
 ]
 
 MIDDLEWARE = [
