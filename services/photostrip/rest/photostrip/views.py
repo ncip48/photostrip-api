@@ -50,7 +50,7 @@ class PhotostripViewSet(BaseViewSet):
         # Deduct the token
         TokenTransaction.objects.create(
             user=request.user,
-            amount=-10,
+            amount=10,
             type=TokenTransaction.Choices.SPEND,
             note="Photostrip creation",
         )
