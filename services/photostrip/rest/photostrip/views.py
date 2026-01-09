@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from core.common.viewsets import BaseViewSet
 from services.photostrip.models.photostrip import Photostrip
 from services.photostrip.rest.photostrip.serializers import PhotostripSerializer
+from services.transaction.models import TokenTransaction
 
 if TYPE_CHECKING:
     pass
@@ -45,6 +46,14 @@ class PhotostripViewSet(BaseViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
+
+        # Deduct the token
+        TokenTransaction.objects.create(
+            user=request.user,
+            amount=-10,
+            type=TokenTransaction.Choices.SPEND,
+            note="Photostrip creation",
+        )
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
