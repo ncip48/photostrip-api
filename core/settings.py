@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "services.template",
     "services.product",
     "services.transaction",
+    "services.dashboard",
 ]
 
 MIDDLEWARE = [
