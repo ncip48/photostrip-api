@@ -1,5 +1,5 @@
-from services.account.rest.user.serializers import ProfileSerializer
 from __future__ import annotations
+from services.account.rest.user.serializers import ProfileSerializer
 
 import logging
 import os
