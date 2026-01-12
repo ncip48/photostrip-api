@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from services.transaction.rest.topup.serializers import TopupTransactionSerializer
 from services.activity.rest.activity.serializers import ActivitySerializer
-from __future__ import annotations
 from services.activity.models.activity import Activity
 
 from django.db.models.aggregates import Sum
