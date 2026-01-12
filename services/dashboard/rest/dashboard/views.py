@@ -1,5 +1,5 @@
-from services.activity.models.activity import Activity
 from __future__ import annotations
+from services.activity.models.activity import Activity
 
 from django.db.models.aggregates import Sum
 
