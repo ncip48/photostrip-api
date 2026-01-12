@@ -60,7 +60,7 @@ class PhotostripViewSet(BaseViewSet):
         Activity.objects.create(
             user=request.user,
             activity=f"{request.user.username} has created photostrip.",
-            reference=serializer.data["subid"],
+            reference=serializer.data["pk"],
             model="photostrip.Photostrip",
         )
 
