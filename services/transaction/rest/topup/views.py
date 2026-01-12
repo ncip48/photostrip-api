@@ -36,6 +36,9 @@ class TopupTransactionViewSet(BaseViewSet):
     my_tags = ["Topups"]
 
     def get_queryset(self):
+        is_superuser = self.request.user.is_superuser
+        if is_superuser:
+            return self.queryset
         return self.queryset.owned(user=self.request.user)
 
 
