@@ -1,5 +1,5 @@
-from services.activity.models.activity import Activity
 from __future__ import annotations
+from services.activity.models.activity import Activity
 
 import logging
 from typing import TYPE_CHECKING
