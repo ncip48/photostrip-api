@@ -1,3 +1,5 @@
+from services.transaction.rest.topup.serializers import TopupTransactionSerializer
+from services.activity.rest.activity.serializers import ActivitySerializer
 from __future__ import annotations
 from services.activity.models.activity import Activity
 
@@ -59,11 +61,14 @@ class DashboardStatsViewSet(ViewSet):
     @action(detail=False, methods=["get"])
     def activities(self, request: Request) -> Response:
         last_activities = Activity.objects.all().order_by("-created")[:10]
-        return Response({"activities": last_activities})
+        serializer = ActivitySerializer(last_activities, many=True)
+        return Response({"activities": serializer.data})
+
 
     @action(detail=False, methods=["get"])
     def transactions(self, request: Request) -> Response:
         last_transactions = TopupTransaction.objects.filter(
             status=TopupTransaction.Status.SUCCESS
         ).order_by("-created")[:10]
-        return Response({"transactions": last_transactions})
+        serializer = TopupTransactionSerializer(last_transactions, many=True)
+        return Response({"transactions": serializer.data})
