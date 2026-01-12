@@ -1,3 +1,4 @@
+from services.account.rest.user.serializers import ProfileSerializer
 from __future__ import annotations
 
 import logging
@@ -21,6 +22,34 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 __all__ = ("TopupTransactionSerializer",)
+
+class BaseTopupTransactionSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
+    float_to_int_fields = ("token", "total", "fee")
+
+    user = ProfileSerializer()
+
+    product = serializers.SlugRelatedField(
+        slug_field="subid",
+        queryset=Product.objects.all(),
+        required=False,
+    )
+
+    class Meta:
+        model = TopupTransaction
+        fields = [
+            "pk",
+            "reference",
+            "token",
+            "total",
+            "qris",
+            "expired_at",
+            "fee",
+            "status",
+            "provider",
+            "product",
+            "user",
+            "created",
+        ]
 
 
 class TopupTransactionSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
