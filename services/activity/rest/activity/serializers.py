@@ -9,7 +9,7 @@ class ActivitySerializer(BaseModelSerializer):
         fields = [
             "pk",
             "activity",
-            "references",
+            "reference",
             "model",
             "user",
             "created",
