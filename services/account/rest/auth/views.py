@@ -1,3 +1,4 @@
+from services.activity.models.activity import Activity
 from __future__ import annotations
 
 import logging
