@@ -110,6 +110,14 @@ class RegisterView(generics.CreateAPIView):
         access = refresh.access_token
         access["is_superuser"] = user.is_superuser
 
+        # Log into model Activity
+        Activity.objects.create(
+            user=user,
+            activity=f"{user.username} has registered.",
+            reference=user.subid,
+            model="account.User",
+        )
+
         return Response(
             {
                 "refresh": str(refresh),

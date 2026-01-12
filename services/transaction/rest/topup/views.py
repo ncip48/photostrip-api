@@ -70,6 +70,14 @@ class TopupWebhookView(APIView):
                 note=f"Topup #{topup.reference}",
             )
 
+            # Log into model Activity
+            Activity.objects.create(
+                user=topup.user,
+                activity=f"{topup.user.username} has topup {topup.token} tokens. Reference: {topup.reference}.",
+                reference=topup.subid,
+                model="transaction.TopupTransaction",
+            )
+
         elif status == "failed":
             TopupTransaction.objects.filter(reference=order_id).update(
                 status=TopupTransaction.Status.FAILED

@@ -54,6 +54,15 @@ class PhotostripViewSet(BaseViewSet):
             type=TokenTransaction.Choices.SPEND,
             note="Photostrip creation",
         )
+
+        # Log into model Activity
+        Activity.objects.create(
+            user=request.user,
+            activity=f"{request.user.username} has created photostrip.",
+            reference=serializer.data["subid"],
+            model="photostrip.Photostrip",
+        )
+
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
