@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from services.transaction.models import TokenTransaction
+
 from services.transaction.rest.topup.serializers import BaseTopupTransactionSerializer
 
 from services.transaction.rest.topup.serializers import TopupTransactionSerializer
@@ -51,7 +53,11 @@ class DashboardStatsViewSet(ViewSet):
 
     @action(detail=False, methods=["get"])
     def photostrips(self, request: Request) -> Response:
-        count = Photostrip.objects.count()
+        is_superuser = request.user.is_superuser
+        if is_superuser:
+            count = Photostrip.objects.count()
+        else:
+            count = Photostrip.objects.owned(user=request.user).count()
         return Response({"count": count})
 
     @action(detail=False, methods=["get"])
@@ -75,3 +81,18 @@ class DashboardStatsViewSet(ViewSet):
         ).order_by("-created")[:10]
         serializer = BaseTopupTransactionSerializer(last_transactions, many=True)
         return Response({"transactions": serializer.data})
+
+    @action(detail=False, methods=["get"])
+    def balances(self, request: Request) -> Response:
+        balances = TokenTransaction.objects.current_token(user=request.user)
+        return Response({"balances": balances})
+
+    @action(detail=False, methods=["get"])
+    def spents(self, request: Request) -> Response:
+        spents = TokenTransaction.objects.spent_amount(user=request.user)
+        return Response({"spents": spents})
+
+    @action(detail=False, methods=["get"])
+    def usage_rates(self, request: Request) -> Response:
+        usage_rates = TokenTransaction.objects.usage_rates(user=request.user)
+        return Response({"usage_rates": usage_rates})

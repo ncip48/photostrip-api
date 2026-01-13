@@ -61,6 +61,18 @@ class TokenTransactionManager(_TokenTransactionManagerBase):
     def current_token(self, user):
         return self.get_queryset().current_token(user)
 
+    def spent_amount(self, user):
+        return self.get_queryset().spent_amount(user)
+
+    def topup_amount(self, user):
+        return self.get_queryset().topup_amount(user)
+
+    def gift_amount(self, user):
+        return self.get_queryset().gift_amount(user)
+
+    def usage_rates(self, user):
+        return self.get_queryset().spent_amount(user) / 7
+
 
 class TokenTransaction(get_subid_model()):
     class Choices(models.TextChoices):
