@@ -8,6 +8,9 @@ from django.db import models
 from django.db.models import DecimalField, Sum, Value
 from django.db.models.functions import Coalesce
 from django.utils.translation import gettext_lazy as _
+from django.db.models.functions import TruncDate
+from django.utils import timezone
+from datetime import timedelta
 
 from core.common.models import get_subid_model
 
@@ -72,6 +75,44 @@ class TokenTransactionManager(_TokenTransactionManagerBase):
 
     def usage_rates(self, user):
         return self.get_queryset().spent_amount(user) / 7
+
+    def token_usage_activity(self, user):
+        today = timezone.localdate()
+        start_of_week = today - timedelta(days=today.weekday())  # Monday
+        end_of_week = start_of_week + timedelta(days=6)          # Sunday
+
+        queryset = (
+            self.get_queryset()
+            .filter(
+                user=user,
+                type__iexact="spend",
+                created__date__range=(start_of_week, end_of_week),
+            )
+            .annotate(day=TruncDate("created"))
+            .values("day")
+            .annotate(tokens=Sum("amount"))
+            .order_by("day")
+        )
+
+        # Prepare full week (Mon–Sun), default = 0
+        chart_map = {
+            (start_of_week + timedelta(days=i)): 0
+            for i in range(7)
+        }
+
+        for row in queryset:
+            chart_map[row["day"]] = row["tokens"]
+
+        # Final format for Recharts
+        chart_data = [
+            {
+                "day": (start_of_week + timedelta(days=i)).strftime("%a"),
+                "tokens": chart_map[start_of_week + timedelta(days=i)],
+            }
+            for i in range(7)
+        ]
+
+        return chart_data
 
 
 class TokenTransaction(get_subid_model()):

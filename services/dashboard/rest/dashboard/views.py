@@ -96,3 +96,9 @@ class DashboardStatsViewSet(ViewSet):
     def usage_rates(self, request: Request) -> Response:
         usage_rates = TokenTransaction.objects.usage_rates(user=request.user)
         return Response({"count": usage_rates})
+
+    @action(detail=False, methods=["get"])
+    def token_usage_activity(self, request: Request) -> Response:
+
+        chartData = TokenTransaction.objects.token_usage_activity(user=request.user)
+        return Response({"chartData": chartData})
