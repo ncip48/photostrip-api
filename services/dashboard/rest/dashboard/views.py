@@ -85,14 +85,14 @@ class DashboardStatsViewSet(ViewSet):
     @action(detail=False, methods=["get"])
     def balances(self, request: Request) -> Response:
         balances = TokenTransaction.objects.current_token(user=request.user)
-        return Response({"balances": balances})
+        return Response({"count": balances})
 
     @action(detail=False, methods=["get"])
     def spents(self, request: Request) -> Response:
         spents = TokenTransaction.objects.spent_amount(user=request.user)
-        return Response({"spents": spents})
+        return Response({"count": spents})
 
     @action(detail=False, methods=["get"])
     def usage_rates(self, request: Request) -> Response:
         usage_rates = TokenTransaction.objects.usage_rates(user=request.user)
-        return Response({"usage_rates": usage_rates})
+        return Response({"count": usage_rates})
