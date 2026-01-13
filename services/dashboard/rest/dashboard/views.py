@@ -101,4 +101,4 @@ class DashboardStatsViewSet(ViewSet):
     def token_usage_activity(self, request: Request) -> Response:
 
         chartData = TokenTransaction.objects.token_usage_activity(user=request.user)
-        return Response({"chartData": chartData})
+        return Response(chartData)
