@@ -8,7 +8,7 @@ from services.transaction.rest.topup.serializers import TopupTransactionSerializ
 from services.activity.rest.activity.serializers import ActivitySerializer
 from services.activity.models.activity import Activity
 
-from django.db.models.aggregates import Sum
+from django.db.models import Sum, F
 
 import logging
 from typing import TYPE_CHECKING
@@ -62,10 +62,15 @@ class DashboardStatsViewSet(ViewSet):
 
     @action(detail=False, methods=["get"])
     def revenues(self, request: Request) -> Response:
-        transactions = TopupTransaction.objects.filter(
+        revenue = TopupTransaction.objects.filter(
             status=TopupTransaction.Status.SUCCESS
-        ).aggregate(Sum("total"))
-        return Response({"count": transactions["total__sum"]})
+        ).aggregate(
+            revenue=Sum(F("total") - F("fee"))
+        )
+
+        return Response({
+            "count": revenue["revenue"] or 0
+        })
 
     @action(detail=False, methods=["get"])
     def activities(self, request: Request) -> Response:
