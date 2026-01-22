@@ -70,7 +70,6 @@ class VoucherViewSet(BaseViewSet):
 
         return Response(
             {
-                "valid": True,
                 "voucher": {
                     "code": voucher.code,
                     "subid": voucher.subid,
