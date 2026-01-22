@@ -59,7 +59,6 @@ class VoucherViewSet(BaseViewSet):
         try:
             voucher = Voucher.objects.select_related("event").get(
                 code=code,
-                user=request.user,  # 🔒 remove this if vouchers should be public
             )
         except Voucher.DoesNotExist:
             return Response(
