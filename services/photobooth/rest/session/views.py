@@ -51,4 +51,4 @@ class SessionViewSet(BaseViewSet):
         """
         session = self.get_object()
         files = session.file_set.all()
-        return Response(FileSerializer(files, many=True).data)
+        return Response(FileSerializer(files, many=True, context={"request": request}).data)
