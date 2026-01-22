@@ -33,12 +33,6 @@ class SessionViewSet(BaseViewSet):
     search_fields = []
     my_tags = ["Photobooth Sessions"]
 
-    def get_queryset(self):
-        """
-        Only sessions owned by current user.
-        """
-        return self.queryset.owned(user=self.request.user)
-
     def perform_create(self, serializer):
         """
         Assign session owner automatically.
