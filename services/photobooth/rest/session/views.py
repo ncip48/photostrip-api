@@ -1,3 +1,4 @@
+from services.photobooth.rest.file.serializers import FileSerializer
 from __future__ import annotations
 
 import logging
@@ -42,3 +43,12 @@ class SessionViewSet(BaseViewSet):
         Assign session owner automatically.
         """
         serializer.save(user=self.request.user)
+
+    @action(detail=False, methods=["get"])
+    def files(self, request):
+        """
+        List files for a session.
+        """
+        session = self.get_object()
+        files = session.files.all()
+        return Response(FileSerializer(files, many=True).data)
