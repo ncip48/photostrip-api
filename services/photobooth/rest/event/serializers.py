@@ -35,7 +35,6 @@ class EventSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
         model = Event
         fields = [
             "pk",
-            "subid",
             "title",
             "subtitle",
             "background",

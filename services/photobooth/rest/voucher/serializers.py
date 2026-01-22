@@ -23,7 +23,6 @@ class VoucherSerializer(BaseModelSerializer):
         model = Voucher
         fields = [
             "pk",
-            "subid",
             "event",
             "code",
             "created",
