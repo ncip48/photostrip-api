@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "services.transaction",
     "services.dashboard",
     "services.activity",
+    "services.photobooth",
 ]
 
 MIDDLEWARE = [
