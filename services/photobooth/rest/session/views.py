@@ -44,8 +44,8 @@ class SessionViewSet(BaseViewSet):
         """
         serializer.save(user=self.request.user)
 
-    @action(detail=False, methods=["get"])
-    def files(self, request):
+    @action(detail=True, methods=["get"])
+    def files(self, request, subid=None):
         """
         List files for a session.
         """
