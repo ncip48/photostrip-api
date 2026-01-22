@@ -1,3 +1,16 @@
+# Environment
 .env
-__pycache__
-**/__pycache__
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff
+db.sqlite3
+staticfiles/
+media/
+
+# Virtual environment
+venv/
+.env/
