@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 
 from core.common.viewsets import BaseViewSet
 from services.photobooth.models.session import Session
@@ -44,7 +45,11 @@ class SessionViewSet(BaseViewSet):
         """
         serializer.save(user=self.request.user)
 
-    @action(detail=True, methods=["get"])
+    @action(
+        detail=True,
+        methods=["get"],
+        permission_classes=[AllowAny],
+    )
     def files(self, request, subid=None):
         """
         List files for a session.
