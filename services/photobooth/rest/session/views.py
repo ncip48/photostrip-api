@@ -50,5 +50,5 @@ class SessionViewSet(BaseViewSet):
         List files for a session.
         """
         session = self.get_object()
-        files = session.files.all()
+        files = session.file_set.all()
         return Response(FileSerializer(files, many=True).data)
