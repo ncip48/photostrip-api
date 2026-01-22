@@ -62,7 +62,7 @@ class VoucherViewSet(BaseViewSet):
             )
         except Voucher.DoesNotExist:
             return Response(
-                {"valid": False, "detail": _("Invalid voucher code.")},
+                {"detail": _("Invalid voucher code.")},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
