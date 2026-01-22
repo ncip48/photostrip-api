@@ -1,5 +1,5 @@
-from services.photobooth.rest.file.serializers import FileSerializer
 from __future__ import annotations
+from services.photobooth.rest.file.serializers import FileSerializer
 
 import logging
 from typing import TYPE_CHECKING
