@@ -47,7 +47,7 @@ class EventViewSet(BaseViewSet):
         # get default event by first event
         event = Event.objects.first()
         if event:
-            return Response(EventSerializer(event).data)
+            return Response(EventSerializer(event, context={"request": request}).data)
         return Response({"message": "No default event found"}, status=404)
 
     @action(detail=False, methods=["get"])
