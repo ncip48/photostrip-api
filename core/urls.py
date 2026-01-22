@@ -50,6 +50,7 @@ urlpatterns = [
     path("api/", include("services.product.rest.urls")),
     path("api/", include("services.transaction.rest.urls")),
     path("api/", include("services.dashboard.rest.urls")),
+    path("api/", include("services.photobooth.rest.urls")),
     # Swagger UI routes
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",

@@ -43,6 +43,14 @@ class EventViewSet(BaseViewSet):
         serializer.save(user=self.request.user)
 
     @action(detail=False, methods=["get"])
+    def default(self, request):
+        # get default event by first event
+        event = Event.objects.first()
+        if event:
+            return Response(EventSerializer(event).data)
+        return Response({"message": "No default event found"}, status=404)
+
+    @action(detail=False, methods=["get"])
     def summary(self, request):
         """
         Event summary for current user.
