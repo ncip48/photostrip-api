@@ -42,6 +42,7 @@ class File(get_subid_model()):
     session = models.ForeignKey("photobooth.Session", on_delete=models.CASCADE)
     # file = models.ForeignKey("file.File", on_delete=models.CASCADE)
     file = models.FileField(upload_to="photobooth/files/")
+    live_video = models.FileField(upload_to="photobooth/live/", null=True, blank=True)
 
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
 
