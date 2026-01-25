@@ -19,6 +19,7 @@ class FileSerializer(BaseModelSerializer):
     """
     Serializer for Photobooth File
     """
+
     event = serializers.SlugRelatedField(
         slug_field="subid",
         queryset=Event.objects.all(),
@@ -37,6 +38,7 @@ class FileSerializer(BaseModelSerializer):
             "event",
             "session",
             "file",
+            "live_video",
             "created",
             "updated",
         ]
