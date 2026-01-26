@@ -54,11 +54,11 @@ class SessionViewSet(BaseViewSet):
         """
         List files for a session.
         """
-        type = request.query_params.get("type", "default")
+        file_type = request.query_params.get("type")
         session = self.get_object()
         files = session.file_set.all()
-        if type:
-            files = files.filter(type=type)
+        if file_type:
+            files = files.filter(type=file_type)
         return Response(
             FileSerializer(files, many=True, context={"request": request}).data
         )
