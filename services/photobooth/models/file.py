@@ -38,9 +38,15 @@ class File(get_subid_model()):
     Custom File model to group permissions.
     """
 
+    class Type(models.TextChoices):
+        PHOTOSTRIP = "photostrip", "Photostrip"
+        LIVE_VIDEO = "live_video", "Live Video"
+        GIF = "gif", "GIF"
+        DEFAULT = "default", "Default"
+
     event = models.ForeignKey("photobooth.Event", on_delete=models.CASCADE)
     session = models.ForeignKey("photobooth.Session", on_delete=models.CASCADE)
-    # file = models.ForeignKey("file.File", on_delete=models.CASCADE)
+    type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
     file = models.FileField(upload_to="photobooth/files/")
     live_video = models.FileField(upload_to="photobooth/live/", null=True, blank=True)
 

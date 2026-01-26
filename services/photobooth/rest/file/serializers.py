@@ -39,6 +39,7 @@ class FileSerializer(BaseModelSerializer):
             "session",
             "file",
             "live_video",
+            "type",
             "created",
             "updated",
         ]

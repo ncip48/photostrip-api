@@ -1,0 +1,128 @@
+[
+  {
+    "id": "chess",
+    "type": "1R",
+    "name": "Chess",
+    "location": "images/chess.png",
+    "size": {
+      "width_photostrip": 592,
+      "height_photostrip": 1792
+    },
+    "dropzones": [
+      {
+        "id": "zone1",
+        "top": 140,
+        "left": 85,
+        "width": 425,
+        "height": 325
+      },
+      {
+        "id": "zone2",
+        "top": 740,
+        "left": 85,
+        "width": 425,
+        "height": 325
+      },
+      {
+        "id": "zone3",
+        "top": 1310,
+        "left": 85,
+        "width": 425,
+        "height": 325
+      }
+    ]
+  },
+  {
+    "id": "enjoy",
+    "type": "1R",
+    "name": "Enjoy",
+    "location": "images/enjoy.png",
+    "size": {
+      "width_photostrip": 566,
+      "height_photostrip": 1700
+    },
+    "dropzones": [
+      {
+        "id": "zone1",
+        "top": 95,
+        "left": 64,
+        "width": 438,
+        "height": 383
+      },
+      {
+        "id": "zone2",
+        "top": 597,
+        "left": 64,
+        "width": 438,
+        "height": 383
+      },
+      {
+        "id": "zone3",
+        "top": 1100,
+        "left": 64,
+        "width": 438,
+        "height": 363
+      }
+    ]
+  },
+  {
+    "id": "t2",
+    "type": "1R",
+    "name": "Happy",
+    "location": "images/happy.png",
+    "size": {
+      "width_photostrip": 591,
+      "height_photostrip": 1772
+    },
+    "dropzones": [
+      { "id": "zone1", "top": 143, "left": 94, "width": 403, "height": 305 },
+      { "id": "zone2", "top": 616, "left": 94, "width": 403, "height": 305 },
+      { "id": "zone3", "top": 1089, "left": 94, "width": 403, "height": 305 }
+    ]
+  },
+  {
+    "id": "t3",
+    "type": "1R",
+    "name": "Love",
+    "location": "images/love.png",
+    "size": {
+      "width_photostrip": 591,
+      "height_photostrip": 1772
+    },
+    "dropzones": [
+      { "id": "zone1", "top": 283, "left": 60, "width": 472, "height": 360 },
+      { "id": "zone2", "top": 731, "left": 60, "width": 472, "height": 360 },
+      { "id": "zone3", "top": 1179, "left": 60, "width": 472, "height": 353 }
+    ]
+  },
+  {
+    "id": "t4",
+    "type": "1R",
+    "name": "Flower",
+    "location": "images/flower.png",
+    "size": {
+      "width_photostrip": 591,
+      "height_photostrip": 1772
+    },
+    "dropzones": [
+      { "id": "zone1", "top": 158, "left": 105, "width": 380, "height": 380 },
+      { "id": "zone2", "top": 710, "left": 105, "width": 380, "height": 380 },
+      { "id": "zone3", "top": 1262, "left": 105, "width": 380, "height": 380 }
+    ]
+  },
+  {
+    "id": "t5",
+    "type": "1R",
+    "name": "Cool",
+    "location": "images/cool.png",
+    "size": {
+      "width_photostrip": 591,
+      "height_photostrip": 1772
+    },
+    "dropzones": [
+      { "id": "zone1", "top": 138, "left": 85, "width": 398, "height": 395 },
+      { "id": "zone2", "top": 685, "left": 85, "width": 412, "height": 395 },
+      { "id": "zone3", "top": 1232, "left": 85, "width": 412, "height": 395 }
+    ]
+  }
+]
