@@ -1,5 +1,5 @@
-from services.photostrip.utils.generator import generate_photostrip
 from __future__ import annotations
+from services.photostrip.utils.generator import generate_photostrip
 from services.photostrip.rest.generate.serializers import GeneratePhotostripSerializer
 import uuid
 from pathlib import Path
