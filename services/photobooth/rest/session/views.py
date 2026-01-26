@@ -56,7 +56,9 @@ class SessionViewSet(BaseViewSet):
         """
         type = request.query_params.get("type", "default")
         session = self.get_object()
-        files = session.file_set.filter(type=type)
+        files = session.file_set.all()
+        if type:
+            files = files.filter(type=type)
         return Response(
             FileSerializer(files, many=True, context={"request": request}).data
         )
