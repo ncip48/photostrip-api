@@ -16,14 +16,21 @@ class GeneratePhotostripSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        """
-        Collect all uploaded files dynamically as zones
-        """
         request = self.context["request"]
-        files = request.FILES
 
-        if not files:
-            raise serializers.ValidationError("No photos uploaded")
+        photos = {}
 
-        attrs["photos"] = files
+        # Files
+        for key, file in request.FILES.items():
+            photos[key] = file
+
+        # URLs / strings
+        for key, value in request.data.items():
+            if key.startswith("zone") and isinstance(value, str):
+                photos.setdefault(key, value)
+
+        if not photos:
+            raise serializers.ValidationError("No photos provided")
+
+        attrs["photos"] = photos
         return attrs
