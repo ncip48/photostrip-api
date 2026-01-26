@@ -34,6 +34,9 @@ class FileViewSet(BaseViewSet):
     serializer_class = FileSerializer
     lookup_field = "subid"
     search_fields = []
+    filterset_fields = [
+        "type",
+    ]
     my_tags = ["Photobooth Files"]
 
     def get_queryset(self):
