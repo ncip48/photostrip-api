@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING
 from rest_framework import serializers
 from core.common.serializers import BaseModelSerializer
 from services.photobooth.models import File, Event, Session
-import boto3
-from django.conf import settings
+from core.common.s3 import generate_presigned_url
 
 if TYPE_CHECKING:
     pass
@@ -50,18 +49,10 @@ class FileSerializer(BaseModelSerializer):
         read_only_fields = ("created", "updated")
 
     def get_file_url(self, obj):
-        client = boto3.client(
-            "s3",
-            endpoint_url=settings.AWS_S3_ENDPOINT_URL,
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
+        if not obj.file:
+            return None
 
-        return client.generate_presigned_url(
-            "get_object",
-            Params={
-                "Bucket": settings.AWS_STORAGE_BUCKET_NAME,
-                "Key": obj.file.name,
-            },
-            ExpiresIn=3600,
-        )
+        if not obj.file.name:
+            return None
+
+        return generate_presigned_url(obj.file.name)
