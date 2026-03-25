@@ -17,6 +17,9 @@ from core.common.viewsets import BaseViewSet
 from services.photobooth.models.file import File
 from services.photobooth.rest.file.serializers import FileSerializer
 
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 if TYPE_CHECKING:
     pass
 
@@ -51,6 +54,47 @@ class FileViewSet(BaseViewSet):
         """
         serializer.save(user=self.request.user)
 
+    # @action(detail=False, methods=["post"], url_path="generate-photostrip")
+    # def generate_photostrip(self, request):
+    #     serializer = GeneratePhotostripSerializer(
+    #         data=request.data,
+    #         context={"request": request},
+    #     )
+    #     serializer.is_valid(raise_exception=True)
+
+    #     template_id = serializer.validated_data["template_id"]
+    #     photos = serializer.validated_data["photos"]
+
+    #     event = serializer.validated_data.get("event")
+    #     session = serializer.validated_data.get("session")
+    #     user = request.user
+
+    #     filename = f"{template_id}_{uuid.uuid4().hex}.png"
+    #     temp_path = Path(settings.MEDIA_ROOT) / "tmp" / filename
+
+    #     # 1️⃣ Generate image
+    #     generate_photostrip(
+    #         template_id=template_id,
+    #         photos=photos,
+    #         output_path=temp_path,
+    #     )
+
+    #     # 2️⃣ Save into File model
+    #     with open(temp_path, "rb") as f:
+    #         File.objects.create(
+    #             event=event,
+    #             session=session,
+    #             user=user,
+    #             file=DjangoFile(f, name=filename),
+    #             type=File.Type.PHOTOSTRIP,
+    #         )
+
+    #     # 3️⃣ Optional: cleanup temp file
+    #     temp_path.unlink(missing_ok=True)
+
+    #     return Response(
+    #         status=status.HTTP_201_CREATED,
+    #     )
     @action(detail=False, methods=["post"], url_path="generate-photostrip")
     def generate_photostrip(self, request):
         serializer = GeneratePhotostripSerializer(
@@ -67,28 +111,25 @@ class FileViewSet(BaseViewSet):
         user = request.user
 
         filename = f"{template_id}_{uuid.uuid4().hex}.png"
-        temp_path = Path(settings.MEDIA_ROOT) / "tmp" / filename
 
-        # 1️⃣ Generate image
+        # 1️⃣ Generate image into memory buffer
+        buffer = BytesIO()
+
         generate_photostrip(
             template_id=template_id,
             photos=photos,
-            output_path=temp_path,
+            output_path=buffer,  # generator must support file-like object
         )
 
-        # 2️⃣ Save into File model
-        with open(temp_path, "rb") as f:
-            File.objects.create(
-                event=event,
-                session=session,
-                user=user,
-                file=DjangoFile(f, name=filename),
-                type=File.Type.PHOTOSTRIP,
-            )
+        buffer.seek(0)
 
-        # 3️⃣ Optional: cleanup temp file
-        temp_path.unlink(missing_ok=True)
-
-        return Response(
-            status=status.HTTP_201_CREATED,
+        # 2️⃣ Save directly to MinIO via django-storages
+        File.objects.create(
+            event=event,
+            session=session,
+            user=user,
+            file=ContentFile(buffer.read(), name=filename),
+            type=File.Type.PHOTOSTRIP,
         )
+
+        return Response(status=status.HTTP_201_CREATED)

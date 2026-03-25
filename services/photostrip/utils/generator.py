@@ -4,6 +4,7 @@ from pathlib import Path
 from PIL import Image, ImageOps
 from io import BytesIO
 import requests
+from typing import Union, IO
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,19 +49,56 @@ def load_image(source) -> Image.Image:
     return image.convert("RGBA")
 
 
+# def generate_photostrip(
+#     template_id: str,
+#     photos,
+#     output_path: Path,
+# ) -> Path:
+#     """
+#     photos:
+#     {
+#         "zone1": UploadedFile | "https://example.com/a.jpg",
+#         "zone2": UploadedFile | "https://example.com/b.jpg",
+#     }
+#     """
+
+#     config = load_template_by_id(template_id)
+
+#     template_image_path = BASE_DIR / "templates" / config["location"]
+#     base = Image.open(template_image_path).convert("RGBA")
+
+#     for zone in config["dropzones"]:
+#         source = photos.get(zone["id"])
+#         if not source:
+#             continue
+
+#         # 🔥 Normalize input → PIL Image
+#         photo = load_image(source)
+
+#         # 🔥 COVER behavior
+#         photo = resize_and_crop_cover(
+#             photo,
+#             zone["width"],
+#             zone["height"],
+#         )
+
+#         base.paste(
+#             photo,
+#             (zone["left"], zone["top"]),
+#             photo,
+#         )
+
+#     output_path.parent.mkdir(parents=True, exist_ok=True)
+#     base.save(output_path, "PNG")
+
+#     return output_path
+
+
 def generate_photostrip(
     template_id: str,
     photos,
-    output_path: Path,
-) -> Path:
-    """
-    photos:
-    {
-        "zone1": UploadedFile | "https://example.com/a.jpg",
-        "zone2": UploadedFile | "https://example.com/b.jpg",
-    }
-    """
-
+    output_path: Union[Path, IO],
+):
     config = load_template_by_id(template_id)
 
     template_image_path = BASE_DIR / "templates" / config["location"]
@@ -71,10 +109,8 @@ def generate_photostrip(
         if not source:
             continue
 
-        # 🔥 Normalize input → PIL Image
         photo = load_image(source)
 
-        # 🔥 COVER behavior
         photo = resize_and_crop_cover(
             photo,
             zone["width"],
@@ -87,7 +123,11 @@ def generate_photostrip(
             photo,
         )
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    base.save(output_path, "PNG")
+    # ✅ Save supports BOTH filesystem & memory buffer
+    if isinstance(output_path, Path):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        base.save(output_path, "PNG")
+    else:
+        base.save(output_path, "PNG")
 
     return output_path
