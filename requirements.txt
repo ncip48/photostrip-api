@@ -17,3 +17,5 @@ sqlparse==0.5.3
 uritemplate==4.2.0
 requests
 corsheaders
+django-storages
+boto3
