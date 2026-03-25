@@ -32,7 +32,7 @@ class FileSerializer(BaseModelSerializer):
         queryset=Session.objects.all(),
         required=True,
     )
-    file = serializers.SerializerMethodField()
+    file_url = serializers.SerializerMethodField()
 
     class Meta:
         model = File
@@ -40,8 +40,8 @@ class FileSerializer(BaseModelSerializer):
             "pk",
             "event",
             "session",
-            # "file",
             "file",
+            "file_url",
             "live_video",
             "type",
             "created",
@@ -49,7 +49,7 @@ class FileSerializer(BaseModelSerializer):
         ]
         read_only_fields = ("created", "updated")
 
-    def get_file(self, obj):
+    def get_file_url(self, obj):
         client = boto3.client(
             "s3",
             endpoint_url=settings.AWS_S3_ENDPOINT_URL,
