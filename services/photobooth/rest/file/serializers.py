@@ -31,7 +31,7 @@ class FileSerializer(BaseModelSerializer):
         queryset=Session.objects.all(),
         required=True,
     )
-    file_url = serializers.SerializerMethodField()
+    # file_url = serializers.SerializerMethodField()
 
     class Meta:
         model = File
@@ -40,7 +40,7 @@ class FileSerializer(BaseModelSerializer):
             "event",
             "session",
             "file",
-            "file_url",
+            # "file_url",
             "live_video",
             "type",
             "created",
@@ -48,11 +48,11 @@ class FileSerializer(BaseModelSerializer):
         ]
         read_only_fields = ("created", "updated")
 
-    def get_file_url(self, obj):
-        if not obj.file:
-            return None
+    # def get_file_url(self, obj):
+    #     if not obj.file:
+    #         return None
 
-        if not obj.file.name:
-            return None
+    #     if not obj.file.name:
+    #         return None
 
-        return generate_presigned_url(obj.file.name)
+    #     return generate_presigned_url(obj.file.name)
