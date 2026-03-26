@@ -46,4 +46,4 @@ class TemplateSize(get_subid_model()):
         verbose_name_plural = _("template sizes")
 
     def __str__(self) -> str:
-        return f"Size of {self.template.template_id}"
+        return f"Size of {self.template.subid}"
