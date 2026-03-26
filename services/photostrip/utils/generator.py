@@ -194,7 +194,7 @@ def generate_photostrip(
     template = (
         Template.objects.select_related("size")
         .prefetch_related("dropzones")
-        .get(pk=template_subid)
+        .get(subid=template_subid)
     )
 
     # 🚀 Load overlay image from storage safely
