@@ -49,4 +49,4 @@ class Dropzone(get_subid_model()):
         verbose_name_plural = _("dropzones")
 
     def __str__(self) -> str:
-        return f"{self.dropzone_id} @ {self.template.template_id}"
+        return f"{self.subid} @ {self.template.template_id}"
