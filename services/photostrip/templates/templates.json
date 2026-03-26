@@ -178,5 +178,73 @@
         "height": 516
       }
     ]
+  },
+  {
+    "id": "sister",
+    "type": "4R",
+    "name": "Sister",
+    "location": "images/sister.png",
+    "size": {
+      "width_photostrip": 1414,
+      "height_photostrip": 2000
+    },
+    "dropzones": [
+      {
+        "id": "zone1",
+        "top": 331,
+        "left": 36,
+        "width": 639,
+        "height": 437
+      },
+      {
+        "id": "zone2",
+        "top": 736,
+        "left": 36,
+        "width": 642,
+        "height": 434
+      },
+      {
+        "id": "zone3",
+        "top": 1138,
+        "left": 34,
+        "width": 644,
+        "height": 432
+      },
+      {
+        "id": "zone4",
+        "top": 1536,
+        "left": 30,
+        "width": 646,
+        "height": 436
+      },
+      {
+        "id": "zone5",
+        "top": 332,
+        "left": 745,
+        "width": 640,
+        "height": 436
+      },
+      {
+        "id": "zone6",
+        "top": 734,
+        "left": 743,
+        "width": 640,
+        "height": 434
+      },
+      {
+        "id": "zone7",
+        "top": 1136,
+        "left": 742,
+        "width": 640,
+        "height": 434
+      },
+      {
+        "id": "zone8",
+        "top": 1540,
+        "left": 742,
+        "width": 639,
+        "height": 432
+      }
+    ]
   }
 ]
