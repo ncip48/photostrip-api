@@ -68,7 +68,7 @@ class GeneratePhotostripViewSet(ViewSet):
 
         # 1️⃣ Generate image
         generate_photostrip(
-            template_id=template_id,
+            template_subid=template_id,
             photos=photos,
             output_path=temp_path,
         )

@@ -1,9 +1,15 @@
+from services.template.models import Template
 from services.photobooth.models import Session, Event
 from rest_framework import serializers
 
 
 class GeneratePhotostripSerializer(serializers.Serializer):
-    template_id = serializers.CharField()
+    # template_id = serializers.CharField()
+    template = serializers.SlugRelatedField(
+        slug_field="subid",
+        queryset=Template.objects.all(),
+        required=True,
+    )
     event = serializers.SlugRelatedField(
         slug_field="subid",
         queryset=Event.objects.all(),

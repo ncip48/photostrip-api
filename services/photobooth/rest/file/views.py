@@ -59,20 +59,20 @@ class FileViewSet(BaseViewSet):
         )
         serializer.is_valid(raise_exception=True)
 
-        template_id = serializer.validated_data["template_id"]
+        template = serializer.validated_data["template"]
         photos = serializer.validated_data["photos"]
 
         event = serializer.validated_data.get("event")
         session = serializer.validated_data.get("session")
         user = request.user
 
-        filename = f"{template_id}_{uuid.uuid4().hex}.png"
+        filename = f"{template.subid}_{uuid.uuid4().hex}.png"
 
         # 1️⃣ Generate image into memory buffer
         buffer = BytesIO()
 
         generate_photostrip(
-            template_id=template_id,
+            template_subid=template.subid,
             photos=photos,
             output_path=buffer,  # generator must support file-like object
         )
