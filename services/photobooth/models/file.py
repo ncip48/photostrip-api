@@ -9,6 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from core.common.models import get_subid_model
 from services.account.models import User
 
+import os
+
 if TYPE_CHECKING:
     pass
 
@@ -33,6 +35,19 @@ class FileManager(_FileManagerBase):
     pass
 
 
+def photobooth_file_upload_path(instance: File, filename: str) -> str:
+    """
+    Upload path:
+    photobooth/file/:subid/:filename
+    """
+    return os.path.join(
+        "photobooth",
+        "file",
+        str(instance.subid),
+        filename,
+    )
+
+
 class File(get_subid_model()):
     """
     Custom File model to group permissions.
@@ -47,8 +62,10 @@ class File(get_subid_model()):
     event = models.ForeignKey("photobooth.Event", on_delete=models.CASCADE)
     session = models.ForeignKey("photobooth.Session", on_delete=models.CASCADE)
     type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
-    file = models.FileField(upload_to="photobooth/files/")
-    live_video = models.FileField(upload_to="photobooth/live/", null=True, blank=True)
+    file = models.FileField(upload_to=photobooth_file_upload_path)
+    live_video = models.FileField(
+        upload_to=photobooth_file_upload_path, null=True, blank=True
+    )
 
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
 
