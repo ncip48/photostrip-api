@@ -44,14 +44,11 @@ def photobooth_file_upload_path(instance: File, filename: str) -> str:
 
     ext = filename.split(".")[-1]
     filename = f"{uuid.uuid4().hex}.{ext}"
-
-    event_subid = instance.event.subid if instance.event else "unknown_event"
     session_subid = instance.session.subid if instance.session else "unknown_session"
 
     return os.path.join(
         "photobooth",
         "files",
-        event_subid,
         session_subid,
         filename,
     )
