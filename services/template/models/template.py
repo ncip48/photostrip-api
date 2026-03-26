@@ -39,7 +39,7 @@ class Template(get_subid_model()):
 
     type = models.CharField(max_length=20)
     name = models.CharField(max_length=100)
-    location = models.FileField(upload_to="templates", null=True, blank=True)
+    location = models.FileField(upload_to="templates")
 
     is_active = models.BooleanField(default=True)
 
