@@ -102,8 +102,13 @@ def generate_photostrip(
     config = load_template_by_id(template_id)
 
     template_image_path = BASE_DIR / "templates" / config["location"]
-    base = Image.open(template_image_path).convert("RGBA")
 
+    template_overlay = Image.open(template_image_path).convert("RGBA")
+
+    # create blank transparent canvas same size as template
+    base = Image.new("RGBA", template_overlay.size, (0, 0, 0, 0))
+
+    # paste photos FIRST (background layer)
     for zone in config["dropzones"]:
         source = photos.get(zone["id"])
         if not source:
@@ -120,10 +125,12 @@ def generate_photostrip(
         base.paste(
             photo,
             (zone["left"], zone["top"]),
-            photo,
         )
 
-    # ✅ Save supports BOTH filesystem & memory buffer
+    # paste template LAST (foreground frame overlay)
+    base.paste(template_overlay, (0, 0), template_overlay)
+
+    # save output
     if isinstance(output_path, Path):
         output_path.parent.mkdir(parents=True, exist_ok=True)
         base.save(output_path, "PNG")
