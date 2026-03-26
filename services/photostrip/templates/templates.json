@@ -191,59 +191,59 @@
     "dropzones": [
       {
         "id": "zone1",
-        "top": 331,
-        "left": 36,
+        "top": 375,
+        "left": 39,
         "width": 639,
-        "height": 437
+        "height": 391
       },
       {
         "id": "zone2",
-        "top": 736,
+        "top": 779,
         "left": 36,
         "width": 642,
-        "height": 434
+        "height": 389
       },
       {
         "id": "zone3",
-        "top": 1138,
-        "left": 34,
-        "width": 644,
-        "height": 432
+        "top": 1182,
+        "left": 36,
+        "width": 646,
+        "height": 384
       },
       {
         "id": "zone4",
-        "top": 1536,
-        "left": 30,
-        "width": 646,
-        "height": 436
+        "top": 1584,
+        "left": 32,
+        "width": 640,
+        "height": 391
       },
       {
         "id": "zone5",
-        "top": 332,
+        "top": 368,
         "left": 745,
         "width": 640,
-        "height": 436
+        "height": 398
       },
       {
         "id": "zone6",
-        "top": 734,
-        "left": 743,
-        "width": 640,
-        "height": 434
+        "top": 777,
+        "left": 745,
+        "width": 637,
+        "height": 389
       },
       {
         "id": "zone7",
-        "top": 1136,
-        "left": 742,
+        "top": 1180,
+        "left": 743,
         "width": 640,
-        "height": 434
+        "height": 386
       },
       {
         "id": "zone8",
-        "top": 1540,
-        "left": 742,
+        "top": 1580,
+        "left": 740,
         "width": 639,
-        "height": 432
+        "height": 393
       }
     ]
   }
