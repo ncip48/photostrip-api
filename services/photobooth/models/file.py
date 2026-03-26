@@ -10,6 +10,7 @@ from core.common.models import get_subid_model
 from services.account.models import User
 
 import os
+import uuid
 
 if TYPE_CHECKING:
     pass
@@ -38,12 +39,20 @@ class FileManager(_FileManagerBase):
 def photobooth_file_upload_path(instance: File, filename: str) -> str:
     """
     Upload path:
-    photobooth/file/:subid/:filename
+    photobooth/files/:event_subid/:session_subid/:filename
     """
+
+    ext = filename.split(".")[-1]
+    filename = f"{uuid.uuid4().hex}.{ext}"
+
+    event_subid = instance.event.subid if instance.event else "unknown_event"
+    session_subid = instance.session.subid if instance.session else "unknown_session"
+
     return os.path.join(
         "photobooth",
         "files",
-        str(instance.subid),
+        event_subid,
+        session_subid,
         filename,
     )
 
