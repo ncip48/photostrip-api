@@ -71,9 +71,15 @@ class File(get_subid_model()):
     event = models.ForeignKey("photobooth.Event", on_delete=models.CASCADE)
     session = models.ForeignKey("photobooth.Session", on_delete=models.CASCADE)
     type = models.CharField(max_length=20, choices=Type.choices, default=Type.DEFAULT)
-    file = models.FileField(upload_to=photobooth_file_upload_path)
+    file = models.FileField(
+        upload_to=photobooth_file_upload_path,
+        max_length=500,
+    )
     live_video = models.FileField(
-        upload_to=photobooth_file_upload_path, null=True, blank=True
+        upload_to=photobooth_file_upload_path,
+        null=True,
+        blank=True,
+        max_length=500,
     )
 
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
