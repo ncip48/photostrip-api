@@ -42,7 +42,7 @@ def photobooth_file_upload_path(instance: File, filename: str) -> str:
     """
     return os.path.join(
         "photobooth",
-        "file",
+        "files",
         str(instance.subid),
         filename,
     )
