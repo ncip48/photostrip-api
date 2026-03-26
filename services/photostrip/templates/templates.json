@@ -131,51 +131,51 @@
     "name": "Happiness",
     "location": "images/happiness.png",
     "size": {
-      "width_photostrip": 795,
-      "height_photostrip": 1193
+      "width_photostrip": 1333,
+      "height_photostrip": 2000
     },
     "dropzones": [
       {
         "id": "zone1",
-        "top": 77,
-        "left": 38,
-        "width": 351,
-        "height": 307
+        "top": 129,
+        "left": 64,
+        "width": 589,
+        "height": 515
       },
       {
         "id": "zone2",
-        "top": 395,
-        "left": 40,
-        "width": 349,
-        "height": 313
+        "top": 662,
+        "left": 67,
+        "width": 585,
+        "height": 525
       },
       {
         "id": "zone3",
-        "top": 718,
-        "left": 40,
-        "width": 349,
-        "height": 309
+        "top": 1204,
+        "left": 67,
+        "width": 585,
+        "height": 518
       },
       {
         "id": "zone4",
-        "top": 76,
-        "left": 409,
-        "width": 346,
-        "height": 311
+        "top": 127,
+        "left": 686,
+        "width": 580,
+        "height": 521
       },
       {
         "id": "zone5",
-        "top": 397,
-        "left": 409,
-        "width": 348,
-        "height": 309
+        "top": 666,
+        "left": 686,
+        "width": 584,
+        "height": 518
       },
       {
         "id": "zone6",
-        "top": 720,
-        "left": 407,
-        "width": 351,
-        "height": 308
+        "top": 1207,
+        "left": 682,
+        "width": 589,
+        "height": 516
       }
     ]
   }
