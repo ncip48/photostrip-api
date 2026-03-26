@@ -149,6 +149,7 @@ from django.core.files.storage import default_storage
 
 from services.photostrip.utils.image import resize_and_crop_cover
 from services.template.models import Template
+from services.photobooth.models import File
 
 
 def load_image(source) -> Image.Image:
@@ -156,23 +157,39 @@ def load_image(source) -> Image.Image:
     source can be:
     - UploadedFile
     - URL string
+    - File.subid string (DB lookup)
     """
+
+    image_bytes = None
 
     # Case 1: UploadedFile (multipart)
     if hasattr(source, "read"):
         image_bytes = source.read()
 
-    # Case 2: URL string
+    # Case 2: string input
     elif isinstance(source, str):
-        response = requests.get(source, timeout=10)
-        response.raise_for_status()
-        image_bytes = response.content
+        # Case 2A: URL
+        if source.startswith("http://") or source.startswith("https://"):
+            response = requests.get(source, timeout=10)
+            response.raise_for_status()
+            image_bytes = response.content
+
+        # Case 2B: File.subid lookup
+        else:
+            file_obj = File.objects.filter(subid=source).first()
+
+            if not file_obj:
+                raise ValueError(f"File with subid '{source}' not found")
+
+            with default_storage.open(file_obj.file.name, "rb") as f:
+                image_bytes = f.read()
 
     else:
         raise ValueError("Unsupported image source")
 
     image = Image.open(BytesIO(image_bytes))
     image = ImageOps.exif_transpose(image)
+
     return image.convert("RGBA")
 
 
