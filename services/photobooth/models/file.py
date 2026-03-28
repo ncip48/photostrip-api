@@ -12,6 +12,10 @@ from services.account.models import User
 import os
 import uuid
 
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 if TYPE_CHECKING:
     pass
 
@@ -78,6 +82,9 @@ class File(get_subid_model()):
         blank=True,
         max_length=500,
     )
+    thumbnail = models.ImageField(
+        upload_to=photobooth_file_upload_path, null=True, blank=True
+    )
 
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
 
@@ -92,3 +99,24 @@ class File(get_subid_model()):
 
     def __str__(self) -> str:
         return f"Photobooth File {self.id}"
+
+    def save(self, *args, **kwargs):
+
+        if self.file and not self.thumbnail:
+            img = Image.open(self.file)
+
+            img.thumbnail((400, 400))  # adjust size as needed
+
+            if img.mode == "RGBA":
+                img = img.convert("RGB")
+
+            thumb_io = BytesIO()
+            img.save(thumb_io, format="JPEG", quality=70)
+
+            thumb_name = self.file.name.split("/")[-1]
+
+            self.thumbnail.save(
+                f"thumb_{thumb_name}", ContentFile(thumb_io.getvalue()), save=False
+            )
+
+        super().save(*args, **kwargs)

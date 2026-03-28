@@ -80,7 +80,7 @@ class FileViewSet(BaseViewSet):
         buffer.seek(0)
 
         # 2️⃣ Save directly to MinIO via django-storages
-        File.objects.create(
+        file = File.objects.create(
             event=event,
             session=session,
             user=user,
@@ -88,7 +88,7 @@ class FileViewSet(BaseViewSet):
             type=File.Type.PHOTOSTRIP,
         )
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED, data=FileSerializer(file).data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

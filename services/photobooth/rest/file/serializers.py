@@ -40,6 +40,7 @@ class FileSerializer(BaseModelSerializer):
             "event",
             "session",
             "file",
+            "thumbnail",
             # "file_url",
             "live_video",
             "type",
