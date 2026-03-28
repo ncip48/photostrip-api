@@ -38,26 +38,18 @@ class EventSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
             "title",
             "subtitle",
             "background",
-
             # Pricing
             "is_paid_event",
             "price",
             "max_print_strip",
             "additional_price_per_print_strip",
-
             # Camera settings
             "countdown_timer",
-            "iso",
-            "aperture",
-            "shutter_speed",
-            "flash",
-
             # Time settings (ms)
             "time_payment",
             "time_take_picture",
             "time_configure_photostrip",
             "time_download",
-
             # Meta
             "created",
             "updated",
