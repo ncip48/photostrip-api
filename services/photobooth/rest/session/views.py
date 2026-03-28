@@ -62,3 +62,21 @@ class SessionViewSet(BaseViewSet):
         return Response(
             FileSerializer(files, many=True, context={"request": request}).data
         )
+
+    @action(
+        detail=True,
+        methods=["delete"],
+        url_path="files/(?P<file_subid>[^/.]+)",
+    )
+    def delete_file(self, request, subid=None, file_subid=None):
+        session = self.get_object()
+        file_obj = session.file_set.get(subid=file_subid)
+
+        # delete file from S3
+        if file_obj.file:
+            file_obj.file.delete(save=False)
+
+        # delete database record
+        file_obj.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

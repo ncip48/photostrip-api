@@ -89,3 +89,9 @@ class FileViewSet(BaseViewSet):
         )
 
         return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.file.delete(save=False)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
