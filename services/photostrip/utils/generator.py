@@ -6,9 +6,15 @@ import requests
 from PIL import Image, ImageOps
 from django.core.files.storage import default_storage
 
-from services.photostrip.utils.image import resize_and_crop_cover
+from services.photostrip.utils.image import (
+    resize_and_crop_cover,
+    resize_and_crop_cover_2,
+)
 from services.template.models import Template
 from services.photobooth.models import File
+import imageio.v2 as imageio
+import numpy as np
+from django.core.files.base import ContentFile
 
 
 def load_image(source) -> Image.Image:
@@ -112,3 +118,56 @@ def generate_photostrip(
         base.save(output_path, "PNG")
 
     return output_path
+
+
+def generate_gif(file_instance, photos):
+
+    frames = []
+
+    TARGET_SIZE = (720, 720)
+
+    for key in sorted(photos.keys()):
+        source = photos.get(key)
+
+        if not source:
+            continue
+
+        image = load_image(source)
+
+        # 🔴 FIX: skip invalid frames
+        if image is None:
+            continue
+
+        image = image.convert("RGB")
+
+        image = resize_and_crop_cover(
+            image,
+            TARGET_SIZE[0],
+            TARGET_SIZE[1],
+        )
+
+        frames.append(np.array(image))
+
+    if not frames:
+        raise ValueError("No valid frames available to generate GIF")
+
+    # photobooth bounce animation
+    frames = frames + frames[::-1]
+
+    gif_io = BytesIO()
+
+    imageio.mimsave(
+        gif_io,
+        frames,
+        format="GIF",
+        duration=0.4,
+        loop=0,
+    )
+
+    gif_io.seek(0)
+
+    file_instance.file.save(
+        f"session_{file_instance.session_id}.gif",
+        ContentFile(gif_io.read()),
+        save=True,
+    )

@@ -33,3 +33,39 @@ def resize_and_crop_cover(
     bottom = top + target_height
 
     return img.crop((left, top, right, bottom))
+
+
+def resize_and_crop_cover_2(
+    img: Image.Image, target_width: int, target_height: int
+) -> Image.Image:
+    """
+    Resize image to cover target size, then center-crop.
+    (Equivalent to CSS object-fit: cover)
+    """
+
+    # 🔴 CRITICAL FIX: normalize image mode
+    if img.mode not in ("RGB", "RGBA"):
+        img = img.convert("RGB")
+
+    src_width, src_height = img.size
+    src_ratio = src_width / src_height
+    target_ratio = target_width / target_height
+
+    # Scale so image fully covers target
+    if src_ratio > target_ratio:
+        scale = target_height / src_height
+    else:
+        scale = target_width / src_width
+
+    new_width = int(src_width * scale)
+    new_height = int(src_height * scale)
+
+    img = img.resize((new_width, new_height), Image.LANCZOS)
+
+    # Center crop
+    left = (new_width - target_width) // 2
+    top = (new_height - target_height) // 2
+    right = left + target_width
+    bottom = top + target_height
+
+    img = img.crop((left, top, right, bottom))

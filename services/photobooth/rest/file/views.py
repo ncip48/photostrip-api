@@ -1,5 +1,5 @@
 from __future__ import annotations
-from services.photostrip.utils.generator import generate_photostrip
+from services.photostrip.utils.generator import generate_photostrip, generate_gif
 from services.photostrip.rest.generate.serializers import GeneratePhotostripSerializer
 import uuid
 import logging
@@ -80,7 +80,7 @@ class FileViewSet(BaseViewSet):
         buffer.seek(0)
 
         # 2️⃣ Save directly to MinIO via django-storages
-        file = File.objects.create(
+        photostrip_file = File.objects.create(
             event=event,
             session=session,
             user=user,
@@ -88,7 +88,26 @@ class FileViewSet(BaseViewSet):
             type=File.Type.PHOTOSTRIP,
         )
 
-        return Response(status=status.HTTP_201_CREATED, data=FileSerializer(file).data)
+        gif_file = File.objects.create(
+            event=event,
+            session=session,
+            user=user,
+            type=File.Type.GIF,
+        )
+
+        # generate_gif(gif_file, photos)
+
+        # return Response(
+        #     status=status.HTTP_201_CREATED,
+        #     data={
+        #         "photostrip": FileSerializer(photostrip_file).data,
+        #         "gif": FileSerializer(gif_file).data,
+        #     },
+        # )
+
+        return Response(
+            status=status.HTTP_201_CREATED, data=FileSerializer(photostrip_file).data
+        )
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

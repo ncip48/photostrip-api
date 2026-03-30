@@ -53,6 +53,15 @@ class Event(get_subid_model()):
     )
 
     countdown_timer = models.IntegerField(_("countdown timer"), default=10)
+    orientation = models.CharField(
+        _("orientation"),
+        max_length=10,
+        choices=[
+            ("portrait", "Portrait"),
+            ("landscape", "Landscape"),
+        ],
+        default="landscape",
+    )
 
     # Time in ms
     time_payment = models.PositiveIntegerField(_("time payment"), default=60)

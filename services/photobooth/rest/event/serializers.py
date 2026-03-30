@@ -45,6 +45,7 @@ class EventSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
             "additional_price_per_print_strip",
             # Camera settings
             "countdown_timer",
+            "orientation",
             # Time settings (ms)
             "time_payment",
             "time_take_picture",
