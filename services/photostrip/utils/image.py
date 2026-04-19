@@ -62,10 +62,10 @@ def resize_and_crop_cover_2(
 
     img = img.resize((new_width, new_height), Image.LANCZOS)
 
-    # Center crop
     left = (new_width - target_width) // 2
     top = (new_height - target_height) // 2
     right = left + target_width
     bottom = top + target_height
 
-    img = img.crop((left, top, right, bottom))
+    # ✅ Return the final cropped image!
+    return img.crop((left, top, right, bottom))

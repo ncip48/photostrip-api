@@ -88,12 +88,12 @@ class FileViewSet(BaseViewSet):
             type=File.Type.PHOTOSTRIP,
         )
 
-        gif_file = File.objects.create(
-            event=event,
-            session=session,
-            user=user,
-            type=File.Type.GIF,
-        )
+        # gif_file = File.objects.create(
+        #     event=event,
+        #     session=session,
+        #     user=user,
+        #     type=File.Type.GIF,
+        # )
 
         # generate_gif(gif_file, photos)
 

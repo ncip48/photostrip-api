@@ -11,6 +11,9 @@ from core.mixin import FloatToIntRepresentationMixin
 from services.account.models import Role, User
 from services.account.rest.role.serializers import RoleSerializerSimple
 from services.transaction.models.token import TokenTransaction
+from services.tenant.models.tenant_user import TenantUser
+from typing import Dict, Any, Optional
+from services.tenant.rest.tenant.serializers import TenantSerializer
 
 if TYPE_CHECKING:
     pass
@@ -23,7 +26,63 @@ __all__ = (
 )
 
 
-class ProfileSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
+# =========================================================
+# Tenant mixin (simplified)
+# =========================================================
+class BaseTenantUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TenantUser
+        fields = [
+            "subid",
+            "is_active",
+            "is_owner",
+            "joined_at",
+            "tenant",
+        ]
+
+
+class TenantUserSerializer(BaseTenantUserSerializer):
+    tenant = serializers.SerializerMethodField()
+
+    def get_tenant(self, obj):
+        return TenantSerializer(obj.tenant).data
+
+
+class TenantMixin(serializers.Serializer):
+    tenant = serializers.SerializerMethodField()
+
+    def get_tenant(self, obj):
+        tenant_user = (
+            TenantUser.objects.select_related("tenant")
+            .filter(user=obj, is_active=True)
+            .first()
+        )
+
+        if tenant_user:
+            return TenantSerializer(tenant_user.tenant).data
+
+        return None
+
+
+class UserTenantMixin(serializers.Serializer):
+    tenant = serializers.SerializerMethodField()
+
+    def get_tenant(self, obj: User) -> Optional[Dict[str, Any]]:
+        tenant_user = (
+            TenantUser.objects.select_related("tenant")
+            .filter(user=obj, is_active=True)
+            .first()
+        )
+
+        if tenant_user:
+            return TenantUserSerializer(tenant_user).data
+
+        return None
+
+
+class ProfileSerializer(
+    FloatToIntRepresentationMixin, TenantMixin, BaseModelSerializer
+):
     """
     Serializer for the User model, including roles and aggregated permissions.
     """
@@ -54,6 +113,7 @@ class ProfileSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
             "permissions",
             "modules",
             "balance",
+            "tenant",
         ]
 
     def get_permissions(self, obj):

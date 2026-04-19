@@ -140,11 +140,11 @@ def generate_gif(file_instance, photos):
 
         image = image.convert("RGB")
 
-        image = resize_and_crop_cover(
-            image,
-            TARGET_SIZE[0],
-            TARGET_SIZE[1],
-        )
+        # image = resize_and_crop_cover(
+        #     image,
+        #     TARGET_SIZE[0],
+        #     TARGET_SIZE[1],
+        # )
 
         frames.append(np.array(image))
 
@@ -156,18 +156,19 @@ def generate_gif(file_instance, photos):
 
     gif_io = BytesIO()
 
+    # 1️⃣ Change the format to WEBP
     imageio.mimsave(
         gif_io,
         frames,
-        format="GIF",
-        duration=0.4,
+        format="WEBP",
+        duration=800,
         loop=0,
     )
 
     gif_io.seek(0)
 
     file_instance.file.save(
-        f"session_{file_instance.session_id}.gif",
+        f"session_{file_instance.session_id}.webp",
         ContentFile(gif_io.read()),
         save=True,
     )

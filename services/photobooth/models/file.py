@@ -107,7 +107,11 @@ class File(get_subid_model()):
 
             img.thumbnail((400, 400))  # adjust size as needed
 
-            if img.mode == "RGBA":
+            # ✅ THE FIX: Catch Mode P (GIFs), RGBA, and anything else that isn't standard RGB
+            if img.mode != "RGB":
+                # If you want transparent backgrounds to become white instead of black,
+                # you can paste this onto a white canvas like we discussed earlier.
+                # Otherwise, a simple convert works:
                 img = img.convert("RGB")
 
             thumb_io = BytesIO()
