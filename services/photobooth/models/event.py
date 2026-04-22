@@ -73,6 +73,7 @@ class Event(get_subid_model()):
 
     tenant = models.ForeignKey("tenant.Tenant", on_delete=models.CASCADE)
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
+    is_active = models.BooleanField(_("active"), default=True)
     is_default = models.BooleanField(_("default"), default=False)
 
     created = models.DateTimeField(_("created"), auto_now_add=True)

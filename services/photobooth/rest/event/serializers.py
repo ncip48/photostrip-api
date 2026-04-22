@@ -42,6 +42,7 @@ class EventSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
             # Pricing
             "is_paid_event",
             "is_default",
+            "is_active",
             "price",
             "max_print_strip",
             "additional_price_per_print_strip",
