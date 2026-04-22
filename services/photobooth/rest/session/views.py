@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 
-from core.common.viewsets import BaseViewSet
+from core.common.viewsets import BaseViewSet, TenantQuerysetMixin
 from services.photobooth.models.session import Session
 from services.photobooth.rest.session.serializers import SessionSerializer
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("SessionViewSet",)
 
 
-class SessionViewSet(BaseViewSet):
+class SessionViewSet(BaseViewSet, TenantQuerysetMixin):
     """
     ViewSet for managing Photobooth Sessions.
     """
@@ -37,13 +37,13 @@ class SessionViewSet(BaseViewSet):
         if self.action == "files":
             return self.queryset
 
-        return self.queryset.owned(user=self.request.user)
+        return self.queryset.owned(user=self.request.user, tenant=self.request.tenant)
 
     def perform_create(self, serializer):
         """
         Assign session owner automatically.
         """
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, tenant=self.request.tenant)
 
     @action(
         detail=True,

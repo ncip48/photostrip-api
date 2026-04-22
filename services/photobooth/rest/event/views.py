@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from core.common.viewsets import BaseViewSet
+from core.common.viewsets import BaseViewSet, TenantQuerysetMixin
 from services.photobooth.models.event import Event
 from services.photobooth.rest.event.serializers import EventSerializer
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("EventViewSet",)
 
 
-class EventViewSet(BaseViewSet):
+class EventViewSet(BaseViewSet, TenantQuerysetMixin):
     """
     ViewSet for managing Photobooth Events.
     """
@@ -30,22 +30,18 @@ class EventViewSet(BaseViewSet):
     search_fields = ["title", "subtitle"]
     my_tags = ["Photobooth Events"]
 
-    def get_queryset(self):
-        """
-        Only return events owned by the authenticated user.
-        """
-        return self.queryset.owned(user=self.request.user)
-
     def perform_create(self, serializer):
         """
         Automatically assign event owner.
         """
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, tenant=self.request.tenant)
 
     @action(detail=False, methods=["get"])
     def default(self, request):
-        # get default event by first event
-        event = Event.objects.first()
+        """
+        Get default event for current user.
+        """
+        event = self.get_queryset().filter(is_default=True).first()
         if event:
             return Response(EventSerializer(event, context={"request": request}).data)
         return Response({"message": "No default event found"}, status=404)

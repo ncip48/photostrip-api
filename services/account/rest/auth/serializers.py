@@ -9,6 +9,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer as BaseTokenObtainPairSerializer,
 )
+from services.tenant.models import TenantUser
 
 from services.account.models.user import User
 
@@ -31,6 +32,12 @@ class TokenObtainPairSerializer(BaseTokenObtainPairSerializer):
         # You can add custom claims to the token here if needed
         # For example: token['first_name'] = user.first_name
         token["is_superuser"] = user.is_superuser
+        tenant_user = (
+            TenantUser.objects.select_related("tenant")
+            .filter(user=user, is_active=True)
+            .first()
+        )
+        token["tenant_id"] = tenant_user.tenant.id if tenant_user else None
         return token
 
 

@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from core.common.models import get_subid_model
 from services.account.models import User
+from services.tenant.models import Tenant
 
 if TYPE_CHECKING:
     pass
@@ -22,8 +23,8 @@ __all__ = (
 
 
 class SessionQuerySet(models.QuerySet):
-    def owned(self, user: User) -> models.QuerySet:
-        return self.filter(user=user)
+    def owned(self, user: User, tenant: Tenant) -> models.QuerySet:
+        return self.filter(user=user, tenant=tenant)
 
 
 _SessionManagerBase = models.Manager.from_queryset(SessionQuerySet)  # type: type[SessionQuerySet]
@@ -37,8 +38,12 @@ class Session(get_subid_model()):
     """
     Custom Session model to group permissions.
     """
+
+    tenant = models.ForeignKey("tenant.Tenant", on_delete=models.CASCADE)
     event = models.ForeignKey("photobooth.Event", on_delete=models.CASCADE)
-    voucher = models.ForeignKey("photobooth.Voucher", on_delete=models.CASCADE, null=True, blank=True)
+    voucher = models.ForeignKey(
+        "photobooth.Voucher", on_delete=models.CASCADE, null=True, blank=True
+    )
 
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
 

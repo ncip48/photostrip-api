@@ -71,7 +71,9 @@ class Event(get_subid_model()):
     )
     time_download = models.PositiveIntegerField(_("time download"), default=60)
 
+    tenant = models.ForeignKey("tenant.Tenant", on_delete=models.CASCADE)
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
+    is_default = models.BooleanField(_("default"), default=False)
 
     created = models.DateTimeField(_("created"), auto_now_add=True)
     updated = models.DateTimeField(_("updated"), auto_now=True)

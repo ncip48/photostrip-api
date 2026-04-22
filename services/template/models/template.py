@@ -7,6 +7,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from core.common.models import get_subid_model
+from services.tenant.models import Tenant
 
 if TYPE_CHECKING:
     from services.account.models import User
@@ -37,6 +38,7 @@ class Template(get_subid_model()):
     Photostrip template base model.
     """
 
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     type = models.CharField(max_length=20)
     name = models.CharField(max_length=100)
     location = models.FileField(upload_to="templates")

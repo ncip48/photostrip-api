@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from django.utils.translation import gettext_lazy as _
 from rest_framework import parsers
 
-from core.common.viewsets import BaseViewSet
+from core.common.viewsets import BaseViewSet, TenantQuerysetMixin
 from services.template.models.template import Template
 from services.template.rest.template.serializers import TemplateSerializer
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("TemplateViewSet",)
 
 
-class TemplateViewSet(BaseViewSet):
+class TemplateViewSet(BaseViewSet, TenantQuerysetMixin):
     """
     A viewset for viewing and editing roles.
     Accessible only by superusers.
