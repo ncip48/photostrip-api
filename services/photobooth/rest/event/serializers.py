@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from core.common.serializers import BaseModelSerializer
 from core.mixin import FloatToIntRepresentationMixin
 from services.photobooth.models import Event
+from django.db import transaction
 
 if TYPE_CHECKING:
     pass
@@ -57,3 +58,34 @@ class EventSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
             "updated",
         ]
         read_only_fields = ("created", "updated")
+
+    def create(self, validated_data):
+        request = self.context["request"]
+        tenant = getattr(request, "tenant", None)
+
+        is_default = validated_data.get("is_default", False)
+
+        with transaction.atomic():
+            if tenant and is_default:
+                Event.objects.filter(tenant=tenant, is_default=True).update(
+                    is_default=False
+                )
+
+            validated_data["tenant"] = tenant
+            validated_data["user"] = request.user
+
+            return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        request = self.context["request"]
+        tenant = getattr(request, "tenant", None)
+
+        is_default = validated_data.get("is_default", instance.is_default)
+
+        with transaction.atomic():
+            if tenant and is_default:
+                Event.objects.filter(tenant=tenant, is_default=True).exclude(
+                    pk=instance.pk
+                ).update(is_default=False)
+
+            return super().update(instance, validated_data)
