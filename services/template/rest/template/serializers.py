@@ -8,6 +8,7 @@ from django.db import transaction
 # from rest_framework import serializers
 from core.common.serializers import BaseModelSerializer
 from services.template.models import Dropzone, Template, TemplateSize
+import json
 
 if TYPE_CHECKING:
     pass
@@ -44,45 +45,66 @@ class TemplateSerializer(BaseModelSerializer):
             "dropzones",
         ]
 
+    # def to_internal_value(self, data):
+    #     # FIX 1: Convert QueryDict to a standard Python dict to support nested structures
+    #     if hasattr(data, "dict"):
+    #         data = data.dict()
+    #     else:
+    #         data = data.copy()
+
+    #     # --- parse size[...] ---
+    #     size_data = {}
+    #     # We iterate over a copy of keys so we can pop from 'data' safely
+    #     for key in list(data.keys()):
+    #         if key.startswith("size[") and key.endswith("]"):
+    #             field = key[5:-1]
+    #             val = data[key]  # In a standard dict, no need for getlist
+    #             size_data[field] = val
+    #             data.pop(key)
+
+    #     if size_data:
+    #         data["size"] = size_data
+
+    #     # --- parse dropzones[i][field] ---
+    #     dropzones = {}
+    #     for key in list(data.keys()):
+    #         if key.startswith("dropzones[") and key.endswith("]"):
+    #             inner = key[len("dropzones[") : -1]
+
+    #             # Safety check to ensure format is correct
+    #             if "][" in inner:
+    #                 idx, field = inner.split("][")
+    #                 idx = int(idx)
+    #                 val = data[key]
+
+    #                 dropzones.setdefault(idx, {})
+    #                 dropzones[idx][field] = val
+
+    #             data.pop(key)
+
+    #     if dropzones:
+    #         data["dropzones"] = [dropzones[i] for i in sorted(dropzones)]
+
+    #     return super().to_internal_value(data)
+
     def to_internal_value(self, data):
-        # FIX 1: Convert QueryDict to a standard Python dict to support nested structures
         if hasattr(data, "dict"):
             data = data.dict()
         else:
             data = data.copy()
 
-        # --- parse size[...] ---
-        size_data = {}
-        # We iterate over a copy of keys so we can pop from 'data' safely
-        for key in list(data.keys()):
-            if key.startswith("size[") and key.endswith("]"):
-                field = key[5:-1]
-                val = data[key]  # In a standard dict, no need for getlist
-                size_data[field] = val
-                data.pop(key)
+        # 🔥 FIX: parse JSON string
+        if isinstance(data.get("size"), str):
+            try:
+                data["size"] = json.loads(data["size"])
+            except Exception:
+                pass
 
-        if size_data:
-            data["size"] = size_data
-
-        # --- parse dropzones[i][field] ---
-        dropzones = {}
-        for key in list(data.keys()):
-            if key.startswith("dropzones[") and key.endswith("]"):
-                inner = key[len("dropzones[") : -1]
-
-                # Safety check to ensure format is correct
-                if "][" in inner:
-                    idx, field = inner.split("][")
-                    idx = int(idx)
-                    val = data[key]
-
-                    dropzones.setdefault(idx, {})
-                    dropzones[idx][field] = val
-
-                data.pop(key)
-
-        if dropzones:
-            data["dropzones"] = [dropzones[i] for i in sorted(dropzones)]
+        if isinstance(data.get("dropzones"), str):
+            try:
+                data["dropzones"] = json.loads(data["dropzones"])
+            except Exception:
+                pass
 
         return super().to_internal_value(data)
 
@@ -91,9 +113,10 @@ class TemplateSerializer(BaseModelSerializer):
         # 1. Separate nested data
         size_data = validated_data.pop("size", None)
         dropzones_data = validated_data.pop("dropzones", [])
+        tenant = self.context["request"].tenant
 
         # 2. Create the Template instance
-        template = Template.objects.create(**validated_data)
+        template = Template.objects.create(tenant=tenant, **validated_data)
 
         # 3. Create Size (if exists)
         if size_data:
