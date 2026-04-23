@@ -45,47 +45,11 @@ class TemplateSerializer(BaseModelSerializer):
             "dropzones",
         ]
 
-    # def to_internal_value(self, data):
-    #     # FIX 1: Convert QueryDict to a standard Python dict to support nested structures
-    #     if hasattr(data, "dict"):
-    #         data = data.dict()
-    #     else:
-    #         data = data.copy()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    #     # --- parse size[...] ---
-    #     size_data = {}
-    #     # We iterate over a copy of keys so we can pop from 'data' safely
-    #     for key in list(data.keys()):
-    #         if key.startswith("size[") and key.endswith("]"):
-    #             field = key[5:-1]
-    #             val = data[key]  # In a standard dict, no need for getlist
-    #             size_data[field] = val
-    #             data.pop(key)
-
-    #     if size_data:
-    #         data["size"] = size_data
-
-    #     # --- parse dropzones[i][field] ---
-    #     dropzones = {}
-    #     for key in list(data.keys()):
-    #         if key.startswith("dropzones[") and key.endswith("]"):
-    #             inner = key[len("dropzones[") : -1]
-
-    #             # Safety check to ensure format is correct
-    #             if "][" in inner:
-    #                 idx, field = inner.split("][")
-    #                 idx = int(idx)
-    #                 val = data[key]
-
-    #                 dropzones.setdefault(idx, {})
-    #                 dropzones[idx][field] = val
-
-    #             data.pop(key)
-
-    #     if dropzones:
-    #         data["dropzones"] = [dropzones[i] for i in sorted(dropzones)]
-
-    #     return super().to_internal_value(data)
+        if self.instance:
+            self.fields["location"].required = False
 
     def to_internal_value(self, data):
         if hasattr(data, "dict"):
