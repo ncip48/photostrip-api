@@ -90,3 +90,13 @@ class EventSerializer(FloatToIntRepresentationMixin, BaseModelSerializer):
                 ).update(is_default=False)
 
             return super().update(instance, validated_data)
+
+
+class EventSerializerSimple(BaseModelSerializer):
+    class Meta:
+        model = Event
+        fields = [
+            "pk",
+            "title",
+            "subtitle",
+        ]

@@ -29,3 +29,12 @@ class VoucherSerializer(BaseModelSerializer):
             "updated",
         ]
         read_only_fields = ("created", "updated")
+
+
+class VoucherSerializerSimple(BaseModelSerializer):
+    class Meta:
+        model = Voucher
+        fields = [
+            "pk",
+            "code",
+        ]

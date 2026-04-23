@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from rest_framework import serializers
 from core.common.serializers import BaseModelSerializer
 from services.photobooth.models import File, Event, Session
-from core.common.s3 import generate_presigned_url
+# from core.common.s3 import generate_presigned_url
 
 if TYPE_CHECKING:
     pass
