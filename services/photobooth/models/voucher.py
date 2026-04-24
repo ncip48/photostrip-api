@@ -37,10 +37,10 @@ class Voucher(get_subid_model()):
     """
     Custom Voucher model to group permissions.
     """
-    event = models.ForeignKey("photobooth.Event", on_delete=models.CASCADE)
-    
+
+    tenant = models.ForeignKey("tenant.Tenant", on_delete=models.CASCADE)
     code = models.CharField(_("code"), max_length=255)
-    
+
     user = models.ForeignKey("account.User", on_delete=models.CASCADE)
 
     created = models.DateTimeField(_("created"), auto_now_add=True)

@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 
-from core.common.viewsets import BaseViewSet
+from core.common.viewsets import BaseViewSet, TenantQuerysetMixin
 from services.photobooth.models.voucher import Voucher
 from services.photobooth.rest.voucher.serializers import VoucherSerializer
 
@@ -20,28 +20,22 @@ logger = logging.getLogger(__name__)
 __all__ = ("VoucherViewSet",)
 
 
-class VoucherViewSet(BaseViewSet):
+class VoucherViewSet(BaseViewSet, TenantQuerysetMixin):
     """
     ViewSet for managing Photobooth Vouchers.
     """
 
-    queryset = Voucher.objects.select_related("event")
+    queryset = Voucher.objects.select_related("tenant")
     serializer_class = VoucherSerializer
     lookup_field = "subid"
     search_fields = ["code"]
     my_tags = ["Photobooth Vouchers"]
 
-    def get_queryset(self):
-        """
-        Only vouchers owned by current user.
-        """
-        return self.queryset.owned(user=self.request.user)
-
     def perform_create(self, serializer):
         """
         Assign voucher owner automatically.
         """
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, tenant=self.request.tenant)
 
     @action(detail=False, methods=["post"])
     def validate(self, request):
@@ -57,8 +51,10 @@ class VoucherViewSet(BaseViewSet):
             )
 
         try:
-            voucher = Voucher.objects.select_related("event").get(
+            voucher = Voucher.objects.select_related("tenant").get(
                 code=code,
+                tenant=request.tenant,
+                is_used=False,
             )
         except Voucher.DoesNotExist:
             return Response(
@@ -66,19 +62,11 @@ class VoucherViewSet(BaseViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        event = voucher.event
-
         return Response(
             {
                 "voucher": {
                     "code": voucher.code,
                     "subid": voucher.subid,
-                },
-                "event": {
-                    "subid": event.subid,
-                    "title": event.title,
-                    "is_paid_event": event.is_paid_event,
-                    "price": event.price,
                 },
             },
             status=status.HTTP_200_OK,
