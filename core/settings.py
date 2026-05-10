@@ -210,6 +210,7 @@ INTERNAL_IPS = [
 CORS_ALLOWED_ORIGINS = [
     "https://photostrip.batakscript.id",
     "http://localhost:5173",
+    "https://app.neonbooth.mom",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
