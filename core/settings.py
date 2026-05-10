@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "services.activity",
     "services.photobooth",
     "services.tenant",
+    "services.agenda"
 ]
 
 MIDDLEWARE = [

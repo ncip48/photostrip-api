@@ -207,3 +207,14 @@ class UserSerializer(BaseModelSerializer):
             instance.roles.set(roles_data)
 
         return instance
+
+class UserSerializerSimple(BaseModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "pk",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+        ]
