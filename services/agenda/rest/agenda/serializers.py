@@ -100,24 +100,24 @@ class AgendaSerializer(BaseModelSerializer):
         # Optional overlap validation.
         # Cancelled bookings are ignored.
         # Remove this block if overlapping bookings should be allowed.
-        if tenant and start_at and end_at and status != Agenda.BookingStatus.CANCELLED:
-            qs = Agenda.objects.filter(
-                tenant=tenant,
-                start_at__lt=end_at,
-                end_at__gt=start_at,
-            ).exclude(status=Agenda.BookingStatus.CANCELLED)
+        # if tenant and start_at and end_at and status != Agenda.BookingStatus.CANCELLED:
+        #     qs = Agenda.objects.filter(
+        #         tenant=tenant,
+        #         start_at__lt=end_at,
+        #         end_at__gt=start_at,
+        #     ).exclude(status=Agenda.BookingStatus.CANCELLED)
 
-            if self.instance:
-                qs = qs.exclude(pk=self.instance.pk)
+        #     if self.instance:
+        #         qs = qs.exclude(pk=self.instance.pk)
 
-            if qs.exists():
-                raise serializers.ValidationError(
-                    {
-                        "start_at": _(
-                            "This booking overlaps with another active booking."
-                        )
-                    }
-                )
+        #     if qs.exists():
+        #         raise serializers.ValidationError(
+        #             {
+        #                 "start_at": _(
+        #                     "This booking overlaps with another active booking."
+        #                 )
+        #             }
+        #         )
 
         return attrs
 
