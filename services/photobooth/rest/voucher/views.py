@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("VoucherViewSet",)
 
 
-class VoucherViewSet(BaseViewSet, TenantQuerysetMixin):
+class VoucherViewSet(TenantQuerysetMixin, BaseViewSet):
     """
     ViewSet for managing Photobooth Vouchers.
     """

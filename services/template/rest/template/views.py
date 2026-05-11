@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("TemplateViewSet",)
 
 
-class TemplateViewSet(BaseViewSet, TenantQuerysetMixin):
+class TemplateViewSet(TenantQuerysetMixin, BaseViewSet):
     """
     A viewset for viewing and editing roles.
     Accessible only by superusers.

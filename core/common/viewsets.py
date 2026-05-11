@@ -44,6 +44,8 @@ class TenantQuerysetMixin:
     def get_queryset(self):
         user = self.request.user
         tenant = getattr(self.request, "tenant", None)
+        
+        print("TENANT", tenant)
 
         queryset = super().get_queryset()
 

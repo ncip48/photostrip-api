@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("EventViewSet",)
 
 
-class EventViewSet(BaseViewSet, TenantQuerysetMixin):
+class EventViewSet(TenantQuerysetMixin, BaseViewSet):
     """
     ViewSet for managing Photobooth Events.
     """

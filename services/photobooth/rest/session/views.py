@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("SessionViewSet",)
 
 
-class SessionViewSet(BaseViewSet, TenantQuerysetMixin):
+class SessionViewSet(TenantQuerysetMixin, BaseViewSet):
     """
     ViewSet for managing Photobooth Sessions.
     """

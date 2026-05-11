@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 __all__ = ("AgendaViewSet",)
 
 
-class AgendaViewSet(BaseViewSet, TenantQuerysetMixin):
+class AgendaViewSet(TenantQuerysetMixin, BaseViewSet):
     """
     ViewSet for photobooth calendar event bookings.
 
