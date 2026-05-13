@@ -76,14 +76,14 @@ class SubscriptionSerializer(BaseModelSerializer):
 
 class SubscriptionSerializerSimple(BaseModelSerializer):
     plan = SubscriptionPlanSerializerSimple(read_only=True)
-    tenant = TenantSerializerSimple(read_only=True)
+    # tenant = TenantSerializerSimple(read_only=True)
 
     class Meta:
         model = Subscription
         fields = [
             "pk",
             "plan",
-            "tenant",
+            # "tenant",
             "status",
             "current_period_start",
             "current_period_end",

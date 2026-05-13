@@ -31,8 +31,8 @@ class TenantUserManager(_TenantUserManagerBase):
 
 
 class TenantUser(get_subid_model()):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tenant_users",)
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name="tenant_users",)
     is_owner = models.BooleanField(_("owner status"), default=False)
     is_active = models.BooleanField(_("active status"), default=True)
     joined_at = models.DateTimeField(auto_now_add=True)

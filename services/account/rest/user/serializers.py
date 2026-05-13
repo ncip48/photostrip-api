@@ -14,6 +14,8 @@ from services.transaction.models.token import TokenTransaction
 from services.tenant.models.tenant_user import TenantUser
 from typing import Dict, Any, Optional
 from services.tenant.rest.tenant.serializers import TenantSerializer
+from services.subscription.models import Subscription
+from services.subscription.rest.subscription.serializers import SubscriptionSerializerSimple
 
 if TYPE_CHECKING:
     pass
@@ -93,6 +95,7 @@ class ProfileSerializer(
     is_admin = serializers.BooleanField(read_only=True)
     is_registered = serializers.BooleanField(read_only=True)
     balance = serializers.SerializerMethodField()
+    subscription = serializers.SerializerMethodField()
 
     float_to_int_fields = ["balance"]
 
@@ -114,6 +117,7 @@ class ProfileSerializer(
             "modules",
             "balance",
             "tenant",
+            "subscription",
         ]
 
     def get_permissions(self, obj):
@@ -135,6 +139,29 @@ class ProfileSerializer(
         Returns the balance of the user.
         """
         return TokenTransaction.objects.current_token(obj) or 0
+    
+    def get_subscription(self, obj):
+        """
+        Returns active subscription for current tenant.
+        """
+        tenant_user = obj.tenant_users.filter(is_active=True).first()
+
+        if not tenant_user:
+            return None
+
+        tenant = tenant_user.tenant
+
+        subscription = (
+            Subscription.objects.for_tenant(tenant)
+            .select_related("plan")
+            .order_by("-created")
+            .first()
+        )
+
+        if not subscription:
+            return None
+
+        return SubscriptionSerializerSimple(subscription).data
 
 
 class UserSerializer(BaseModelSerializer):
