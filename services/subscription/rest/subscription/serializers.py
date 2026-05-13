@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from core.common.serializers import BaseModelSerializer
 from services.subscription.models import Subscription
-from services.subscription.rest.subscription_plan.serializers import (
+from services.subscription.rest.plan.serializers import (
     SubscriptionPlanSerializerSimple,
 )
 
