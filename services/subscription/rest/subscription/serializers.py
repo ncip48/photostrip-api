@@ -11,6 +11,7 @@ from services.subscription.rest.plan.serializers import (
 )
 from services.subscription.models import SubscriptionPlan
 from services.tenant.models import Tenant
+from services.tenant.rest.tenant.serializers import TenantSerializerSimple
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,7 @@ class SubscriptionSerializer(BaseModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['plan'] = SubscriptionPlanSerializerSimple(instance.plan).data
+        representation['tenant'] = TenantSerializerSimple(instance.tenant).data
         return representation
 
     def get_is_active(self, obj):
@@ -74,12 +76,14 @@ class SubscriptionSerializer(BaseModelSerializer):
 
 class SubscriptionSerializerSimple(BaseModelSerializer):
     plan = SubscriptionPlanSerializerSimple(read_only=True)
+    tenant = TenantSerializerSimple(read_only=True)
 
     class Meta:
         model = Subscription
         fields = [
             "pk",
             "plan",
+            "tenant",
             "status",
             "current_period_start",
             "current_period_end",
