@@ -21,6 +21,12 @@ class SubscriptionPlanViewSet(BaseViewSet):
     serializer_class = SubscriptionPlanSerializer
     lookup_field = "subid"
     search_fields = ["name", "code", "description"]
+    # required_perms = [
+    #     "account.add_role",
+    #     "account.change_role",
+    #     "account.delete_role",
+    #     "account.view_role",
+    # ]
     ordering = ["price", "id"]
     my_tags = ["Subscription Plans"]
 
