@@ -38,7 +38,6 @@ class SubscriptionSerializer(BaseModelSerializer):
         model = Subscription
         fields = [
             "pk",
-            "subid",
             "tenant",
             "plan",
             "status",
@@ -80,7 +79,6 @@ class SubscriptionSerializerSimple(BaseModelSerializer):
         model = Subscription
         fields = [
             "pk",
-            "subid",
             "plan",
             "status",
             "current_period_start",

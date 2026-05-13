@@ -18,7 +18,6 @@ class SubscriptionInvoiceSerializer(BaseModelSerializer):
         model = SubscriptionInvoice
         fields = [
             "pk",
-            "subid",
             "tenant",
             "subscription",
             "invoice_number",
@@ -42,7 +41,6 @@ class SubscriptionInvoiceSerializerSimple(BaseModelSerializer):
         model = SubscriptionInvoice
         fields = [
             "pk",
-            "subid",
             "invoice_number",
             "amount",
             "currency",

@@ -21,7 +21,6 @@ class SubscriptionPlanSerializer(FloatToIntRepresentationMixin, BaseModelSeriali
         model = SubscriptionPlan
         fields = [
             "pk",
-            "subid",
             "name",
             "code",
             "description",
@@ -44,7 +43,6 @@ class SubscriptionPlanSerializerSimple(FloatToIntRepresentationMixin, BaseModelS
         model = SubscriptionPlan
         fields = [
             "pk",
-            "subid",
             "name",
             "code",
             "price",
