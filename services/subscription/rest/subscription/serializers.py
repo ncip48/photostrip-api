@@ -9,6 +9,8 @@ from services.subscription.models import Subscription
 from services.subscription.rest.plan.serializers import (
     SubscriptionPlanSerializerSimple,
 )
+from services.subscription.models import SubscriptionPlan
+from services.tenant.models import Tenant
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +21,16 @@ __all__ = (
 
 
 class SubscriptionSerializer(BaseModelSerializer):
-    plan_detail = serializers.SerializerMethodField()
+    tenant = serializers.SlugRelatedField(
+        slug_field="subid",
+        queryset=Tenant.objects.all(),
+        required=True,
+    )
+    plan = serializers.SlugRelatedField(
+        slug_field="subid",
+        queryset=SubscriptionPlan.objects.all(),
+        required=True,
+    )
     is_active = serializers.SerializerMethodField()
     is_trial = serializers.SerializerMethodField()
 
@@ -30,7 +41,6 @@ class SubscriptionSerializer(BaseModelSerializer):
             "subid",
             "tenant",
             "plan",
-            "plan_detail",
             "status",
             "current_period_start",
             "current_period_end",
@@ -51,8 +61,10 @@ class SubscriptionSerializer(BaseModelSerializer):
             "plan_detail",
         )
 
-    def get_plan_detail(self, obj):
-        return SubscriptionPlanSerializerSimple(obj.plan).data
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['plan'] = SubscriptionPlanSerializerSimple(instance.plan).data
+        return representation
 
     def get_is_active(self, obj):
         return obj.is_active
