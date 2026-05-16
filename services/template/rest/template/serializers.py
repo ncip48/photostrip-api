@@ -77,7 +77,7 @@ class TemplateSerializer(BaseModelSerializer):
         # 1. Separate nested data
         size_data = validated_data.pop("size", None)
         dropzones_data = validated_data.pop("dropzones", [])
-        tenant = self.context["request"].tenant
+        tenant = validated_data.pop("tenant", None)
 
         # 2. Create the Template instance
         template = Template.objects.create(tenant=tenant, **validated_data)
