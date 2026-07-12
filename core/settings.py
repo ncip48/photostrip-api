@@ -209,17 +209,16 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://photostrip.batakscript.id",
-    "http://localhost:5173",
-    "https://app.neonbooth.mom",
-    "*",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://photostrip.batakscript.id",
+#     "http://localhost:5173",
+#     "https://app.neonbooth.mom",
+# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 # VERY IMPORTANT
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
 
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
